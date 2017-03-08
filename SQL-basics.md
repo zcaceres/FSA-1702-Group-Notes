@@ -128,6 +128,6 @@ GROUP BY Customername
 ### Operators
 ```
 WHERE id = 2 or id = 3
-WHERE id IN (2,3)```
-
+WHERE id IN (2,3)
+```
 `IN` can replace use of `AND`
