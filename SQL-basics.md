@@ -2,9 +2,8 @@
 ```
 CREATE TABLE movies
 (
-columnname datatype,
-columnname datatype,
-FOREIGN KEY columnname REFERENCES anothertablename -------this line is optional, and can be used for foreign keys
+columnname4 datatype,
+columnname5 datatype,
 )
 ```
 * Optional to have `NOT NULL` after "datatype" and before the comma. Also `DEFAULT NULL`, and `PRIMARY KEY` as well
@@ -15,8 +14,8 @@ FOREIGN KEY columnname REFERENCES anothertablename -------this line is optional,
 
 
 `CONSTRAINT chosennamehere typeofcontstraint (columnname)`
-
 `CONSTRAINT chosennamehere UNIQUE (columnname, columnname2)` #second line
+` FOREIGN KEY (columnname4) REFERENCES anothertablename ` -------constraint referencing an already declared column
 
 * Above statements can be used before the closing parenthesis to store contraints in variable for easy access
 * the second line makes it so a new row can't be added if it has two values in the specified columns that a pre-existing row also has
