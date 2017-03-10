@@ -1,0 +1,173 @@
+# Practical Promises
+March 10, 2017
+A Pithy Primer – Using Libraries to Make and Manage Promises
+
+> **Your Promise Mantra**:
+>Whenever you get a promise and wonder what do with it. I should think .then(function)
+
+
+#### 1. Blocking, Non-Blocking, Callback Hell
+#### 2. Promises To The Rescue
+
+___
+## 1. Callbacks and Promises
+Callbacks: just functions passed to another function.
+
+Callbacks can be invoked immediately or wait for something to happen.
+
+> Two kinds of callbacks: **blocking** and **non-blocking**.
+
+#### Blocking Callbacks
+
+These are synchronous callbacks. They happen immediately.
+
+      arr.filter()
+      arr.sort()
+      arr.map()
+
+#### Non-Blocking Callbacks
+
+These are asynchronous callbacks. They happen at some points in the future.
+
+            // Event Handlers
+            button.on('click', callback);
+
+            // Middleware
+            app.use(callback);
+
+            // Vanilla Async callback
+            fs.readFile('file.txt', callback);
+
+
+#### Some trick questions about callbacks:
+
+          var result;
+          setTimeout(function cb () {
+            result = 'hello';
+          }, 0);
+          console.log(result);
+          // 'Hello won't be printed! It'll print undefined.
+
+          // All our synchronous code is run first.
+          // The callback is put on the event queue.            // This callback is only pushed onto the call stack and executed **after** it has been cleared.
+
+
+          // This prints the id of the timer! Which is the return value of setTimeout()
+          var result = setTimeout(function cb () {
+            return 'hello';
+          }, 0);
+          console.log(result);
+
+          // But this one works!
+          return value of setTimeout()
+          setTimeout(function cb () {
+            var result = 'hello';
+            console.log(result);
+            // ^ result will be defined and console log will be called at the appropriate time!
+          }, 0);
+
+The problem we have with **all these asyncs** is that we have to next callbacks in callbacks in callbacks in callbacks in callbacks.
+
+>This leads us to the terrifying prospect of **CALLBACK HELL**: endlessly nesting callbacks!
+
+## 2. Promises to the Rescue
+> Promises represents the eventual results of an asynchronous operation.
+
+They rescue us from **CALLBACK HELL**.
+
+#### Callback vs. Promise
+
+      //async Promise
+      fs.readFileAsync('file.txt').then(
+        function onSuccess (data) { ... },
+        function onError (err) { ... }
+      );
+
+Our async promise is a little box that our value will go into. Promises are **portable**.
+
+      // This still won't work! Don't forget that Promises are still based on callbacks. Our console.log() still won't log result
+      var result;
+      promisifiedSetTimeout(0).then(function success () {
+        result = 'hello';
+      });
+      console.log(result);
+
+      var result = promisifiedSetTimeout(0).then(function success () { result = 'hello'; });
+      console.log(result);
+      // This also won't work. Will log the Promise object it self.
+
+      promisifiedSetTimeout(0).then(function success () {
+        result = 'hello';
+        console.log(result);
+      });
+      // This will work.
+
+**The magic of promises is that our Promise object is portable.**
+
+> Check slides for a comparison between synchronous, async (callbacks), async(promises)
+
+#### Portable Promises – Cool!
+
+> A Promise is an object with a space for the future value that's coming from that Promise. We can pass these boxes around.
+
+      const promise = fs.readFileAsync('file.txt');
+      // ^ the Promise object or the returned value of the promise
+
+      doSomething(promise);
+      // ^ pass our promise to another function to do something on its value
+
+      module.exports = promise;
+      // ^ makes our promise available in another module
+
+We can pass Promises around as though we have the result – even before we have it!
+
+#### Multiple Handlers – Wicked good!
+
+As long as different parts of our file have the same promise, we can do two different things as soon as the data comes back.
+
+#### Linear/Flat – So pretty!
+
+Instead of crazy async nesting, we can do...
+
+        fs.readFileASync('fileOne.txt')
+        .then(function (contents) { .. } )
+        .then(function (contents) { ... }; );
+
+#### Unified Error Handling – Makes failure less sad!
+
+As we go through our .then() chain, we can add error handling at the end ..
+
+      .then(null, function (err) {
+        console.log('error': err);
+      });
+
+      // Or use .catch!
+      .catch(function(err) {
+        console.log(err);
+      });
+
+If we use a .then error catcher at the end, we may not know where the error occurred.
+
+But if we use a .catch at intervals throughout our .then() chain, we can see, 'Oh, an error occurred in one of these three .then()s'!
+
+> A .catch() is all about errors. It's only getting thrown when there is an error. An error generated by a .then() will pass it down until it's handled by an 'err' function in a .then() or a catch.
+
+#### .then() is really important.
+
+In a .then() chain, you are **always passing Promises** down the chain. It is NEVER the value. You can *access* the value of a Promise through a callback in each step of your .then() chain. But each step is always passing along a *Promise object*.
+
+If you don't return anything in a then(), the next then will use the previous value.
+
+#### Using a Promise in our Browser
+
+> fetch() – A browser method that does a .get request, and returns a promise for the mean time.
+
+      var myPromise = fetch(url)
+      .then(function(data) {
+        console.log(data);
+      });
+      .then(function() {
+        console.log('Im finished!');
+      });
+
+____
