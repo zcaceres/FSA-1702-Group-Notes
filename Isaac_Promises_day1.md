@@ -1,6 +1,6 @@
 ## Promises are crazy!
 
-Their main use is to sit and wait for the eventual conclusion of an action, which is vital for asynchronous when we have things that we don't know 
+Their main use is to sit and wait for the eventual conclusion of an action, which is vital for asynchronous when we have things that we don't know when finish
 
 ### Important points
 
