@@ -19,3 +19,26 @@ Their main use is to sit and wait for the eventual conclusion of an action, whic
 * Promises returning promises
 
    The newly returned promise can change the track that the code is currently on, so watch out.
+
+* Doing separate .thens on the same promise, doesnt make the running code run more than once, it only acts on the saved outcome of the promise (success or error) as many times as you do .thens or .catches
+```
+ex:
+
+let myPromise = new Promise(function (resolve, reject) {
+    console.log('doing something')
+    resolve('resolved!')
+})
+
+myPromise.then(function (result) {
+    console.log(result)
+})
+
+myPromise.then(function (result) {
+    console.log(result)
+})
+
+**
+doing something
+resolved!
+resolved!**
+```
