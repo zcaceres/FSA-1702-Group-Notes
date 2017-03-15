@@ -36,9 +36,10 @@ myPromise.then(function (result) {
 myPromise.then(function (result) {
     console.log(result)
 })
-
-**
+```
+Below is consolelogged out: 
+```
 doing something
 resolved!
-resolved!**
+resolved!
 ```
