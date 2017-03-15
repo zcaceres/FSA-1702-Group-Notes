@@ -12,7 +12,7 @@ Their main use is to sit and wait for the eventual conclusion of an action, whic
 
    If an error is thrown, it will keep going down the chain (skipping things) until it finds an error handler; the error handler should be a `.catch`.
 
-   After the `.catch` is fired and leaves its "brackets", the chain is back on the success track as the error was *cleaned* out.
+   After the `.catch` is fired and leaves its "brackets", the chain is back on the success track as the error was *cleaned* out. A subsequent .then's function's argument would be whatever value returned from the .catch
 
 * `.then`
 
